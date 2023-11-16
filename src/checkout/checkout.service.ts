@@ -2,16 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { InitialChargeDto } from './dto';
 import axios from 'axios';
 import { UtilityService } from '../utility/utility.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CheckoutService {
+  constructor(private config: ConfigService) {}
   async initialCharge(dto: InitialChargeDto): Promise<any> {
-    const serverKey = btoa('SB-Mid-server-z6f2aNd2bvZvYut4ov_y2Kvq' + ':');
+    const serverKey = btoa(
+      this.config.get('MIDTRANS_SANDBOX_SERVER_KEY') + ':',
+    );
     const paymentType = 'credit_card';
     const randomString = UtilityService.generateRandomString(15);
+    const midtransUrl = this.config.get('MIDTRANS_SANDBOX_URL');
     try {
       const midtransResponse = await axios.post(
-        'https://api.sandbox.midtrans.com/v2/charge',
+        `${midtransUrl}/v2/charge`,
         {
           payment_type: paymentType,
           transaction_details: {
