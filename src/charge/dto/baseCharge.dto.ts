@@ -1,6 +1,5 @@
 import { Type } from 'class-transformer';
 import {
-  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsNumber,
@@ -8,7 +7,15 @@ import {
   IsString,
 } from 'class-validator';
 
-export class InitialChargeDto {
+export class BaseChargeDto {
+  @IsNotEmpty()
+  @IsString()
+  paymentMethod: string;
+
+  @IsNotEmpty()
+  @IsString()
+  tokenId: string;
+
   @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
@@ -16,24 +23,15 @@ export class InitialChargeDto {
 
   @IsNotEmpty()
   @IsString()
-  tokenId: string;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  @Type(() => Boolean)
-  authentication: boolean;
-
-  @IsNotEmpty()
-  @IsString()
   firstName: string;
-
-  @IsOptional()
-  @IsString()
-  lastName?: string;
 
   @IsEmail()
   @IsNotEmpty()
   email: string;
+
+  @IsOptional()
+  @IsString()
+  lastName?: string;
 
   @IsString()
   @IsOptional()
