@@ -8,6 +8,7 @@ import { plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { CreditCardChargeDto } from '../dto/creditCardCharge.dto';
 import { BankTransferChargeDto } from '../dto/bankTransferCharge.dto';
+import { QRISChargeDto } from '../dto/qRISCharge.dto';
 
 @Injectable()
 export class ChargeDtoPipe implements PipeTransform {
@@ -19,6 +20,8 @@ export class ChargeDtoPipe implements PipeTransform {
       dtoClass = CreditCardChargeDto;
     } else if (value.paymentMethod === 'bank_transfer') {
       dtoClass = BankTransferChargeDto;
+    } else if (value.paymentMethod === 'qris') {
+      dtoClass = QRISChargeDto;
     } else {
       throw new BadRequestException('Invalid payment method or data');
     }

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { IPaymentStrategy } from './interfaces/payment.interface';
+import { ConfigService } from '@nestjs/config';
 import { UtilityService } from '../utility/utility.service';
+import { IPaymentStrategy } from './interfaces/payment.interface';
 import { CreditCardPaymentStrategy } from './strategies/creditCardPayment.strategy';
 import { BankTransferPaymentStrategy } from './strategies/bankTransferPayment.strategy';
-import { ConfigService } from '@nestjs/config';
+import { QRISPaymentStrategy } from './strategies/qRISPayment.strategy';
 
 @Injectable()
 export class ChargeService {
@@ -29,6 +30,9 @@ export class ChargeService {
         break;
       case 'bank_transfer':
         this.strategy = new BankTransferPaymentStrategy(config);
+        break;
+      case 'qris':
+        this.strategy = new QRISPaymentStrategy(config);
         break;
       default:
         throw new Error('Invalid payment method');

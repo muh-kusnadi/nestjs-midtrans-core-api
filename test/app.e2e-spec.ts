@@ -117,7 +117,7 @@ describe('App e2e', () => {
       it('[Mandiri VA] should initialize bank transfer payment successfully', async () => {
         mockedAxios.post.mockResolvedValueOnce({
           data: {
-            status_code: '201',
+            status_code: 201,
             status_message: 'OK, Mandiri Bill transaction is successful',
             transaction_id: '51e7bc1a-306e-4762-8c3e-66766d3c40c3',
             order_id: 'SdBtvDrwzczAw9T',
@@ -152,7 +152,7 @@ describe('App e2e', () => {
       it('[Permata VA] should initialize bank transfer payment successfully', async () => {
         mockedAxios.post.mockResolvedValueOnce({
           data: {
-            status_code: '201',
+            status_code: 201,
             status_message: 'Success, PERMATA VA transaction is successful',
             transaction_id: 'b9bba999-5732-4f65-9285-60009f44135e',
             order_id: 'ISW64yFvLLeMEYW',
@@ -179,6 +179,47 @@ describe('App e2e', () => {
             email: 'john.doe@example.com',
             phone: '6234738473874',
             bankName: 'permata',
+          })
+          .expectStatus(201);
+      });
+    });
+
+    describe('QRISPaymentStrategy', () => {
+      it('should initialize qris payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: 201,
+            status_message: 'QRIS transaction is created',
+            transaction_id: '0d8178e1-c6c7-4ab4-81a6-893be9d924ab',
+            order_id: 'order03',
+            merchant_id: 'M099098',
+            gross_amount: '275000.00',
+            currency: 'IDR',
+            payment_type: 'qris',
+            transaction_time: '2020-09-29 11:46:13',
+            transaction_status: 'pending',
+            fraud_status: 'accept',
+            acquirer: 'gopay',
+            actions: [
+              {
+                name: 'generate-qr-code',
+                method: 'GET',
+                url: 'https://api.midtrans.com/v2/qris/0d8178e1-c6c7-4ab4-81a6-893be9d924ab/qr-code',
+              },
+            ],
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'qris',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
           })
           .expectStatus(201);
       });
