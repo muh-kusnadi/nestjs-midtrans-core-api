@@ -13,10 +13,6 @@ export class BaseChargeDto {
   paymentMethod: string;
 
   @IsNotEmpty()
-  @IsString()
-  tokenId: string;
-
-  @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
   grossAmount: number;

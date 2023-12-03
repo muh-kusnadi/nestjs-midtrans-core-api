@@ -37,7 +37,11 @@ export class CreditCardPaymentStrategy implements IPaymentStrategy {
 
       return midtransResponse.data;
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        console.error('Axios error in CreditCardPaymentStrategy:', error);
+      } else {
+        console.error('Non-Axios error in CreditCardPaymentStrategy:', error);
+      }
       throw new Error('Error fetching data');
     }
   }

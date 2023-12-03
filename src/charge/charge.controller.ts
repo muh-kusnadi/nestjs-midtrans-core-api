@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { ChargeService } from './charge.service';
-import { BaseChargeDto } from './dto/baseCharge.dto';
 import { Response } from 'express';
+import { ChargeDtoPipe } from './pipes/charge-dto.pipes';
 
 @Controller('charge')
 export class ChargeController {
@@ -9,14 +9,15 @@ export class ChargeController {
 
   @Post()
   async createCharge(
-    @Body() baseChargeDto: BaseChargeDto,
+    @Body(new ChargeDtoPipe()) chargeDto: any,
     @Res() response: Response,
   ) {
     const result = await this.chargeService.executeCharge(
-      baseChargeDto.paymentMethod,
-      baseChargeDto,
+      chargeDto.paymentMethod,
+      chargeDto,
     );
+    const statusCode = Number(result.status_code);
 
-    response.status(result.status_code).send(result);
+    response.status(statusCode).send(result);
   }
 }
