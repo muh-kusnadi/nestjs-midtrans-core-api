@@ -10,6 +10,7 @@ import { CreditCardChargeDto } from '../dto/creditCardCharge.dto';
 import { BankTransferChargeDto } from '../dto/bankTransferCharge.dto';
 import { QRISChargeDto } from '../dto/qRISCharge.dto';
 import { GopayChargeDto } from '../dto/gopayCharge.dto';
+import { ShopeePayChargeDto } from '../dto/shopeePayCharge.dto';
 
 @Injectable()
 export class ChargeDtoPipe implements PipeTransform {
@@ -17,16 +18,24 @@ export class ChargeDtoPipe implements PipeTransform {
     let dtoClass;
 
     // Determine which DTO to use based on the paymentMethod
-    if (value.paymentMethod === 'credit_card') {
-      dtoClass = CreditCardChargeDto;
-    } else if (value.paymentMethod === 'bank_transfer') {
-      dtoClass = BankTransferChargeDto;
-    } else if (value.paymentMethod === 'qris') {
-      dtoClass = QRISChargeDto;
-    } else if (value.paymentMethod === 'gopay') {
-      dtoClass = GopayChargeDto;
-    } else {
-      throw new BadRequestException('Invalid payment method or data');
+    switch (value.paymentMethod) {
+      case 'credit_card':
+        dtoClass = CreditCardChargeDto;
+        break;
+      case 'bank_transfer':
+        dtoClass = BankTransferChargeDto;
+        break;
+      case 'qris':
+        dtoClass = QRISChargeDto;
+        break;
+      case 'gopay':
+        dtoClass = GopayChargeDto;
+        break;
+      case 'shopeepay':
+        dtoClass = ShopeePayChargeDto;
+        break;
+      default:
+        throw new BadRequestException('Invalid payment method or data');
     }
 
     const object = plainToInstance(dtoClass, value);

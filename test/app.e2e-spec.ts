@@ -280,5 +280,47 @@ describe('App e2e', () => {
           .expectStatus(201);
       });
     });
+
+    describe('ShopeePayPaymentStrategy', () => {
+      it('should initialize shopee pay payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: '201',
+            status_message: 'ShopeePay transaction is created',
+            channel_response_code: '0',
+            channel_response_message: 'success',
+            transaction_id: 'bb379c3a-218b-47c7-9b0b-25f71f0f1231',
+            order_id: 'test-order-shopeepay-001',
+            merchant_id: 'YON001',
+            gross_amount: '25000.00',
+            currency: 'IDR',
+            payment_type: 'shopeepay',
+            transaction_time: '2020-09-29 11:16:23',
+            transaction_status: 'pending',
+            fraud_status: 'accept',
+            actions: [
+              {
+                name: 'deeplink-redirect',
+                method: 'GET',
+                url: 'https://wsa.uat.wallet.airpay.co.id/universal-link/wallet/pay?deep_and_deferred=1&token=dFhkbmR1bTBIamhW5n7WPz2OrczCvb8_XiHliB9nROFMVByjtwKMAl6G0Ax0cMr79M4hwjs',
+              },
+            ],
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'shopeepay',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+          })
+          .expectStatus(201);
+      });
+    });
   });
 });

@@ -6,6 +6,7 @@ import { CreditCardPaymentStrategy } from './strategies/creditCardPayment.strate
 import { BankTransferPaymentStrategy } from './strategies/bankTransferPayment.strategy';
 import { QRISPaymentStrategy } from './strategies/qRISPayment.strategy';
 import { GopayPaymentStrategy } from './strategies/gopayPayment.strategy';
+import { ShopeePayPaymentStrategy } from './strategies/shopeePayPayment.strategy';
 
 @Injectable()
 export class ChargeService {
@@ -37,6 +38,9 @@ export class ChargeService {
         break;
       case 'gopay':
         this.strategy = new GopayPaymentStrategy(config);
+        break;
+      case 'shopeepay':
+        this.strategy = new ShopeePayPaymentStrategy(config);
         break;
       default:
         throw new Error('Invalid payment method');
