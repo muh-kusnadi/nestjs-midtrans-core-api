@@ -394,5 +394,41 @@ describe('App e2e', () => {
           .expectStatus(201);
       });
     });
+
+    describe('AkulakuPaymentStrategy', () => {
+      it('should initialize akulaku payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: '201',
+            status_message: 'Success, Akulaku transaction is created',
+            transaction_id: '803914af-bd02-4cec-90fd-e11ead1d800a',
+            order_id: 'xaNEIgyxh0pTuFB',
+            redirect_url:
+              'https://api.sandbox.midtrans.com/v2/akulaku/redirect/803914af-bd02-4cec-90fd-e11ead1d800a',
+            merchant_id: 'G095877066',
+            gross_amount: '265000.00',
+            currency: 'IDR',
+            payment_type: 'akulaku',
+            transaction_time: '2023-12-03 21:59:47',
+            transaction_status: 'pending',
+            fraud_status: 'accept',
+            expiry_time: '2023-12-03 23:59:47',
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'akulaku',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+          })
+          .expectStatus(201);
+      });
+    });
   });
 });
