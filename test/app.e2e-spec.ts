@@ -358,5 +358,41 @@ describe('App e2e', () => {
           .expectStatus(201);
       });
     });
+
+    describe('AlfamartPaymentStrategy', () => {
+      it('should initialize alfamart payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: '201',
+            status_message: 'Success, cstore transaction is successful',
+            transaction_id: 'ef0c3930-a075-4a0c-8dfd-62d318a8f77f',
+            order_id: 'sdMgY0LGKlcQTaB',
+            merchant_id: 'G095877066',
+            gross_amount: '265000.00',
+            currency: 'IDR',
+            payment_type: 'cstore',
+            transaction_time: '2023-12-03 21:20:58',
+            transaction_status: 'pending',
+            fraud_status: 'accept',
+            expiry_time: '2023-12-04 21:20:58',
+            payment_code: '9587231008792034',
+            store: 'alfamart',
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'alfamart',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+          })
+          .expectStatus(201);
+      });
+    });
   });
 });
