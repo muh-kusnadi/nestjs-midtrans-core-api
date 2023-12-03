@@ -11,6 +11,7 @@ import { BankTransferChargeDto } from '../dto/bankTransferCharge.dto';
 import { QRISChargeDto } from '../dto/qRISCharge.dto';
 import { GopayChargeDto } from '../dto/gopayCharge.dto';
 import { ShopeePayChargeDto } from '../dto/shopeePayCharge.dto';
+import { IndomaretChargeDto } from '../dto/indomaretCharge.dto';
 
 @Injectable()
 export class ChargeDtoPipe implements PipeTransform {
@@ -33,6 +34,9 @@ export class ChargeDtoPipe implements PipeTransform {
         break;
       case 'shopeepay':
         dtoClass = ShopeePayChargeDto;
+        break;
+      case 'indomaret':
+        dtoClass = IndomaretChargeDto;
         break;
       default:
         throw new BadRequestException('Invalid payment method or data');

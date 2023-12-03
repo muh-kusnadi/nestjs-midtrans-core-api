@@ -322,5 +322,41 @@ describe('App e2e', () => {
           .expectStatus(201);
       });
     });
+
+    describe('IndomaretPaymentStrategy', () => {
+      it('should initialize indomaret payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: '201',
+            status_message: 'Success, cstore transaction is successful',
+            transaction_id: '92ecde38-ac91-498b-a28c-34d36141c4d8',
+            order_id: 'SILDL6pdNPkwcPS',
+            merchant_id: 'G095877066',
+            gross_amount: '265000.00',
+            currency: 'IDR',
+            payment_type: 'cstore',
+            transaction_time: '2023-12-03 21:08:29',
+            transaction_status: 'pending',
+            fraud_status: 'accept',
+            expiry_time: '2023-12-04 21:08:29',
+            payment_code: '406922486389',
+            store: 'indomaret',
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'indomaret',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+          })
+          .expectStatus(201);
+      });
+    });
   });
 });
