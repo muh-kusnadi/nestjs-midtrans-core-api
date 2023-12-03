@@ -430,5 +430,42 @@ describe('App e2e', () => {
           .expectStatus(201);
       });
     });
+
+    describe('KredivoPaymentStrategy', () => {
+      it('should initialize kredivo payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: '201',
+            status_message: 'Kredivo transaction is created',
+            transaction_id: 'c1b4e32c-fd32-4ce3-98ed-130a6faf0fef',
+            order_id: 'orderid-01',
+            redirect_url:
+              'https://api.sandbox.veritrans.co.id/v2/oms/redirect/c1b4e32c-fd32-4ce3-98ed-130a6faf0fef',
+            merchant_id: 'M099098',
+            gross_amount: '40000.00',
+            currency: 'IDR',
+            payment_type: 'kredivo',
+            transaction_time: '2022-04-12 13:55:34',
+            transaction_status: 'pending',
+            fraud_status: 'accept',
+            channel_response_code: 'OK',
+            channel_response_message: 'Success Create Transaction',
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'kredivo',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+          })
+          .expectStatus(201);
+      });
+    });
   });
 });

@@ -10,6 +10,7 @@ import { ShopeePayPaymentStrategy } from './strategies/shopeePayPayment.strategy
 import { IndomaretPaymentStrategy } from './strategies/indomaretPayment.strategy';
 import { AlfamartPaymentStrategy } from './strategies/alfamartPayment.strategy';
 import { AkulakuPaymentStrategy } from './strategies/akulakuPayment.strategy';
+import { KredivoPaymentStrategy } from './strategies/kredivoPayment.strategy';
 
 @Injectable()
 export class ChargeService {
@@ -53,6 +54,9 @@ export class ChargeService {
         break;
       case 'akulaku':
         this.strategy = new AkulakuPaymentStrategy(config);
+        break;
+      case 'kredivo':
+        this.strategy = new KredivoPaymentStrategy(config);
         break;
       default:
         throw new Error('Invalid payment method');
