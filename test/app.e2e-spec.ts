@@ -184,6 +184,234 @@ describe('App e2e', () => {
       });
     });
 
+    describe('BankTransferDirectDebitPaymentStrategy', () => {
+      it('[BCA KlikPay] should initialize bank transfer DIRECT DEBIT payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: 201,
+            status_message: 'OK, BCA KlikPay transaction is successful',
+            transaction_id: 'd4ff8fc1-02fa-4056-afdc-534e20874904',
+            order_id: 'FWsa03ZVe4HUlpu',
+            redirect_url:
+              'https://api.sandbox.midtrans.com/v3/bca/klikpay/redirect/d4ff8fc1-02fa-4056-afdc-534e20874904',
+            merchant_id: 'G095877066',
+            gross_amount: '265000.00',
+            currency: 'IDR',
+            payment_type: 'bca_klikpay',
+            transaction_time: '2023-12-03 22:35:49',
+            transaction_status: 'pending',
+            fraud_status: 'accept',
+            redirect_data: {
+              url: 'https://simulator.sandbox.midtrans.com/bca/klikpay/index',
+              method: 'post',
+              params: {
+                klikPayCode: '03KHAN95877066',
+                transactionNo: '329752',
+                totalAmount: '265000',
+                currency: 'IDR',
+                payType: '01',
+                callback:
+                  'https://staging-client.allstars.id/home/campaign/setup/finish?id=d4ff8fc1-02fa-4056-afdc-534e20874904',
+                transactionDate: '03/12/2023 22:35:49',
+                descp: 'Pembalian Barang',
+                miscFee: '0.00',
+                signature: '2612319681',
+              },
+            },
+            expiry_time: '2023-12-04 00:35:49',
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'direct_debit',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+            source: 'bca_klikpay',
+          })
+          .expectStatus(201);
+      });
+
+      it('[KlikBCA] should initialize bank transfer DIRECT DEBIT payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: '201',
+            status_message: 'Success, KlikBCA transaction is successful',
+            redirect_url: 'https://www.klikbca.com',
+            transaction_id: 'c0ba3583-5111-45a5-9f1c-84c9de7cb2f6',
+            order_id: '3176440',
+            gross_amount: '50000.00',
+            payment_type: 'bca_klikbca',
+            transaction_time: '2016-06-19 15:53:25',
+            transaction_status: 'pending',
+            approval_code: 'tes01',
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'direct_debit',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+            source: 'bca_klikbca',
+          })
+          .expectStatus(201);
+      });
+
+      it('[BRIMO] should initialize bank transfer DIRECT DEBIT payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: '201',
+            status_message: 'Success, BRI E-Pay transaction is successful',
+            transaction_id: 'f7af5b19-5ad5-4267-8fe3-647eb7ce7e6e',
+            order_id: 'nHKZJ6zUDQCa01t',
+            redirect_url:
+              'https://api.sandbox.midtrans.com/v3/bri/epay/redirect/f7af5b19-5ad5-4267-8fe3-647eb7ce7e6e',
+            merchant_id: 'G095877066',
+            gross_amount: '265000.00',
+            currency: 'IDR',
+            payment_type: 'bri_epay',
+            transaction_time: '2023-12-03 22:44:13',
+            transaction_status: 'pending',
+            fraud_status: 'accept',
+            expiry_time: '2023-12-04 00:44:13',
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'direct_debit',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+            source: 'bri_epay',
+          })
+          .expectStatus(201);
+      });
+
+      it('[CIMB Clicks] should initialize bank transfer DIRECT DEBIT payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: '201',
+            status_message: 'Success, CIMB Clicks transaction is successful',
+            redirect_url:
+              'https://api.midtrans.com/cimb-clicks/request?id=226f042f-020e-4829-8bd7-2de64b8673ce',
+            transaction_id: '226f042f-020e-4829-8bd7-2de64b8673ce',
+            order_id: '1000156414164125',
+            gross_amount: '392127.00',
+            payment_type: 'cimb_clicks',
+            transaction_time: '2016-06-19 16:41:25',
+            transaction_status: 'pending',
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'direct_debit',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+            source: 'cimb_clicks',
+          })
+          .expectStatus(201);
+      });
+
+      it('[Danamon Online] should initialize bank transfer DIRECT DEBIT payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: '201',
+            status_message: 'Success, Danamon Online transaction is successful',
+            transaction_id: '8e1b4e2f-ebd2-4bb6-bccf-f18eac3107c7',
+            order_id: 't7qz8T2iio80uRc',
+            redirect_url:
+              'https://api.sandbox.midtrans.com/v2/danamon/online/redirect/8e1b4e2f-ebd2-4bb6-bccf-f18eac3107c7',
+            merchant_id: 'G095877066',
+            gross_amount: '265000.00',
+            currency: 'IDR',
+            payment_type: 'danamon_online',
+            transaction_time: '2023-12-03 22:49:24',
+            transaction_status: 'pending',
+            fraud_status: 'accept',
+            expiry_time: '2023-12-04 00:49:24',
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'direct_debit',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+            source: 'danamon_online',
+          })
+          .expectStatus(201);
+      });
+
+      it('[UOB Ezpay] should initialize bank transfer DIRECT DEBIT payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: '201',
+            status_message: 'Success, UOB Ez Pay transaction is successful',
+            transaction_id: '226f042f-020e-4829-8bd7-2de64b8673ce',
+            order_id: '1000156414164125',
+            gross_amount: '392127.00',
+            payment_type: 'uob_ezpay',
+            transaction_time: '2016-06-19 16:41:25',
+            transaction_status: 'pending',
+            fraud_status: 'accept',
+            actions: [
+              {
+                name: 'web-deeplink-redirect',
+                method: 'GET',
+                url: 'https://u-payment.uob.co.id/startup/ezpay?clientId=107b9f3e-7399-4983-8342-a3350e7b8ce0&type=JWT&signature=Jpc3MiOiIxMDdiOWYzZS03Mzk5LTQ5ODMtODM0Mi1hMzM1MGU3YjhjZTAiLCJpYXQiOjE1NjE1NUBQl',
+              },
+              {
+                name: 'mobile-deeplink-redirect',
+                method: 'GET',
+                url: 'https://digitalbankid.page.link/?link=https://www.tmrwbyuob.com?clientId%3D107b9f3e-7399-4983-8342-a3350e7b8ce0%26signature%3DJpc3MiOiIxMDdiOWYzZS03Mzk5LTQ5ODMtODM0Mi1hMzM1MGU3YjhjZTAiLCJpYXQiOjE1NjE1NUBQl-5gvMiOqzSq-lroACwpf83vpj2NYlExcrYckyV7Oc&type=JWT&apn=com.uob.id.digitalbank.dev&isi=1472320289&ibi=com.uob.id.digitalbank.uat',
+              },
+            ],
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'direct_debit',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+            source: 'uob_ezpay',
+          })
+          .expectStatus(201);
+      });
+    });
+
     describe('QRISPaymentStrategy', () => {
       it('should initialize qris payment successfully', async () => {
         mockedAxios.post.mockResolvedValueOnce({

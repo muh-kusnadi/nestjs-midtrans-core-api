@@ -11,6 +11,7 @@ import { IndomaretPaymentStrategy } from './strategies/indomaretPayment.strategy
 import { AlfamartPaymentStrategy } from './strategies/alfamartPayment.strategy';
 import { AkulakuPaymentStrategy } from './strategies/akulakuPayment.strategy';
 import { KredivoPaymentStrategy } from './strategies/kredivoPayment.strategy';
+import { BankTransferDirectDebitPaymentStrategy } from './strategies/bankTransferDirectDebitPayment.strategy';
 
 @Injectable()
 export class ChargeService {
@@ -36,6 +37,9 @@ export class ChargeService {
         break;
       case 'bank_transfer':
         this.strategy = new BankTransferPaymentStrategy(config);
+        break;
+      case 'direct_debit':
+        this.strategy = new BankTransferDirectDebitPaymentStrategy(config);
         break;
       case 'qris':
         this.strategy = new QRISPaymentStrategy(config);

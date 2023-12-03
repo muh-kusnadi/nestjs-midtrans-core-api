@@ -15,6 +15,7 @@ import { IndomaretChargeDto } from '../dto/indomaretCharge.dto';
 import { AlfamartChargeDto } from '../dto/alfamartCharge.dto';
 import { AkulakuChargeDto } from '../dto/akulakuCharge.dto';
 import { KredivoChargeDto } from '../dto/kredivoCharge.dto';
+import { BankTransferDirectDebitChargeDto } from '../dto/bankTransferDirectDebitCharge.dto';
 
 @Injectable()
 export class ChargeDtoPipe implements PipeTransform {
@@ -28,6 +29,9 @@ export class ChargeDtoPipe implements PipeTransform {
         break;
       case 'bank_transfer':
         dtoClass = BankTransferChargeDto;
+        break;
+      case 'direct_debit':
+        dtoClass = BankTransferDirectDebitChargeDto;
         break;
       case 'qris':
         dtoClass = QRISChargeDto;
