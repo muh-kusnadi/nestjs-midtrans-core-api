@@ -224,5 +224,61 @@ describe('App e2e', () => {
           .expectStatus(201);
       });
     });
+
+    describe('GopayPaymentStrategy', () => {
+      it('should initialize gopay (qris / deep-link) payment successfully', async () => {
+        mockedAxios.post.mockResolvedValueOnce({
+          data: {
+            status_code: '201',
+            status_message: 'GoPay transaction is created',
+            transaction_id: '8ab2c445-7058-4a45-83c0-4ece8671c276',
+            order_id: 'gV6oDFPbPHqjzTK',
+            merchant_id: 'G095877066',
+            gross_amount: '265000.00',
+            currency: 'IDR',
+            payment_type: 'gopay',
+            transaction_time: '2023-12-03 20:18:34',
+            transaction_status: 'pending',
+            fraud_status: 'accept',
+            actions: [
+              {
+                name: 'generate-qr-code',
+                method: 'GET',
+                url: 'https://api.sandbox.midtrans.com/v2/gopay/8ab2c445-7058-4a45-83c0-4ece8671c276/qr-code',
+              },
+              {
+                name: 'deeplink-redirect',
+                method: 'GET',
+                url: 'https://simulator.sandbox.midtrans.com/gopay/partner/app/payment-pin?id=ef27c425-63f4-4e6d-9982-1781ed3fff08',
+              },
+              {
+                name: 'get-status',
+                method: 'GET',
+                url: 'https://api.sandbox.midtrans.com/v2/8ab2c445-7058-4a45-83c0-4ece8671c276/status',
+              },
+              {
+                name: 'cancel',
+                method: 'POST',
+                url: 'https://api.sandbox.midtrans.com/v2/8ab2c445-7058-4a45-83c0-4ece8671c276/cancel',
+              },
+            ],
+            expiry_time: '2023-12-03 20:33:34',
+          },
+        });
+
+        await pactum
+          .spec()
+          .post('/v1/charge')
+          .withBody({
+            paymentMethod: 'gopay',
+            grossAmount: 165000,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            phone: '6234738473874',
+          })
+          .expectStatus(201);
+      });
+    });
   });
 });
